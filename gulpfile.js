@@ -14,7 +14,7 @@ const livereload = true;
 
 function html(done) {
   gulp
-    .src("src/**/*.html")
+    .src("src/index.html")
     .pipe(
       !isDev
         ? htmlmin({
@@ -31,9 +31,9 @@ function html(done) {
   done && done();
 }
 
-function css(done) {
+function scss(done) {
   gulp
-    .src("src/**/*.scss")
+    .src("src/styles/main.scss")
     .pipe(isDev ? sourcemaps.init() : noop())
     .pipe(
       sass({ outputStyle: isDev ? "expanded" : "compressed" }).on(
@@ -59,25 +59,20 @@ function serve(done) {
   done && done();
 }
 
-function build(done) {
-  gulp.series(html, css);
-
-  done && done();
-}
-
-function dev(done) {
-  build(done);
-
-  serve(done);
-
-  gulp.watch("src/**/*.scss", css);
+function watch(done) {
+  gulp.watch("src/**/*.scss", scss);
   gulp.watch("src/**/*.html", html);
 
   done && done();
 }
 
+const build = gulp.series(html, scss);
+
+const dev = gulp.series(build, serve, watch);
+
 exports.html = html;
-exports.css = css;
+exports.scss = scss;
+exports.watch = watch;
 exports.build = build;
 exports.dev = dev;
 exports.default = build;

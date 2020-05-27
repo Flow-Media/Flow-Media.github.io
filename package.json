@@ -11,6 +11,7 @@
   "license": "MIT",
   "scripts": {
     "build": "gulp build",
+    "watch": "gulp watch",
     "dev": "gulp dev",
     "fmt": "prettier src/**/*",
     "clean": "rimraf dist"
