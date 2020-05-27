@@ -12,12 +12,14 @@ function html() {
   return gulp
     .src("src/**/*.html")
     .pipe(
-      htmlmin({
-        caseSensitive: true,
-        collapseWhitespace: true,
-        removeComments: true,
-        decodeEntities: true
-      })
+      !isDev
+        ? htmlmin({
+            caseSensitive: true,
+            collapseWhitespace: true,
+            removeComments: true,
+            decodeEntities: true
+          })
+        : noop()
     )
     .pipe(gulp.dest("dist"))
     .pipe(livereload());
@@ -39,7 +41,7 @@ function css() {
     .pipe(livereload());
 }
 
-function watch() {
+function dev() {
   livereload.listen({}, () => {
     console.log("livereload is running...");
   });
@@ -54,6 +56,6 @@ function build() {
 
 exports.html = html;
 exports.css = css;
-exports.watch = watch;
+exports.dev = dev;
 exports.build = build;
 exports.default = build;
