@@ -12,7 +12,7 @@ const port = PORT ? +PORT : 5300;
 const isDev = NODE_ENV === "development";
 const livereload = true;
 
-function html() {
+function html(done) {
   gulp
     .src("src/**/*.html")
     .pipe(
@@ -27,9 +27,11 @@ function html() {
     )
     .pipe(gulp.dest("dist"))
     .pipe(livereload ? connect.reload() : noop());
+
+  done && done();
 }
 
-function css() {
+function css(done) {
   gulp
     .src("src/**/*.scss")
     .pipe(isDev ? sourcemaps.init() : noop())
@@ -43,27 +45,35 @@ function css() {
     .pipe(isDev ? sourcemaps.write(".") : noop())
     .pipe(gulp.dest("dist"))
     .pipe(livereload ? connect.reload() : noop());
+
+  done && done();
 }
 
-function serve() {
+function serve(done) {
   connect.server({
     root: "dist",
     livereload,
     port
   });
+
+  done && done();
 }
 
-function build() {
+function build(done) {
   gulp.series(html, css);
+
+  done && done();
 }
 
-function dev() {
-  build();
+function dev(done) {
+  build(done);
 
-  serve();
+  serve(done);
 
   gulp.watch("src/**/*.scss", css);
   gulp.watch("src/**/*.html", html);
+
+  done && done();
 }
 
 exports.html = html;
