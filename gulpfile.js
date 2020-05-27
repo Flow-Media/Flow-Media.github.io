@@ -14,7 +14,7 @@ const livereload = true;
 
 function html(done) {
   gulp
-    .src("src/**/*.html")
+    .src("src/index.html")
     .pipe(
       !isDev
         ? htmlmin({
@@ -33,7 +33,7 @@ function html(done) {
 
 function scss(done) {
   gulp
-    .src("src/**/*.scss")
+    .src("src/styles/style.scss")
     .pipe(isDev ? sourcemaps.init() : noop())
     .pipe(
       sass({ outputStyle: isDev ? "expanded" : "compressed" }).on(
@@ -51,7 +51,7 @@ function scss(done) {
 
 function serve(done) {
   connect.server({
-    root: "dist",
+    root: "dist/",
     livereload,
     port
   });
