@@ -1,14 +1,14 @@
-import gulp from "gulp";
-import htmlmin from "gulp-htmlmin";
-import sass from "gulp-sass";
-import autoprefixer from "gulp-autoprefixer";
-import sourcemaps from "gulp-sourcemaps";
-import livereload from "gulp-livereload";
-import noop from "gulp-noop";
+const gulp = require("gulp");
+const htmlmin = require("gulp-htmlmin");
+const sass = require("gulp-sass");
+const autoprefixer = require("gulp-autoprefixer");
+const sourcemaps = require("gulp-sourcemaps");
+const livereload = require("gulp-livereload");
+const noop = require("gulp-noop");
 
 const isDev = process.env.NODE_ENV === "development";
 
-export function html() {
+function html() {
   return gulp
     .src("src/**/*.html")
     .pipe(
@@ -23,7 +23,7 @@ export function html() {
     .pipe(livereload());
 }
 
-export function css() {
+function css() {
   return gulp
     .src("src/**/*.scss")
     .pipe(isDev ? sourcemaps.init() : noop())
@@ -39,7 +39,7 @@ export function css() {
     .pipe(livereload());
 }
 
-export function watch() {
+function watch() {
   livereload.listen({}, () => {
     console.log("livereload is running...");
   });
@@ -48,8 +48,12 @@ export function watch() {
   gulp.watch("src/**/*.html", html);
 }
 
-export function build() {
+function build() {
   return gulp.series(html, css);
 }
 
-export default build;
+exports.html = html;
+exports.css = css;
+exports.watch = watch;
+exports.build = build;
+exports.default = build;
