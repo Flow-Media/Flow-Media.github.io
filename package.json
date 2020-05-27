@@ -1,0 +1,19 @@
+{
+  "name": "flow-media.github.io",
+  "version": "1.0.0",
+  "repository": "Flow-Media/Flow-Media.github.io",
+  "author": "Flow Team",
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^5.1.0",
+    "gh-pages": "^2.2.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-livereload": "^4.0.2",
+    "gulp-sass": "^4.1.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-terser": "^1.2.0",
+    "sass": "^1.26.5"
+  }
+}
