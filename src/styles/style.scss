@@ -1,0 +1,43 @@
+@import "./vars";
+@import "./normalize";
+@import "./reset";
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 -0.4rem 0.9rem 0.2rem rgba(0, 0, 0, 0.5);
+  height: $headerSize;
+  padding: 0 ($headerSize / 1.5);
+  > h1 {
+    font-size: 1.4rem;
+    color: $mainColor;
+    cursor: pointer;
+    &::first-letter {
+      font-size: 1.1em;
+    }
+  }
+  nav {
+    flex-basis: 40%;
+    font-size: 0.98rem;
+    > ul {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      li {
+        &::after {
+          content: "";
+          display: block;
+          width: 0;
+          height: 1.2px;
+          background-color: $mainColor;
+          margin: auto;
+          transition: width 0.5s ease;
+        }
+        &:hover::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
