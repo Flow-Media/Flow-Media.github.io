@@ -14,7 +14,7 @@ const livereload = true;
 
 function html(done) {
   gulp
-    .src("src/index.html")
+    .src("src/**/*.html")
     .pipe(
       !isDev
         ? htmlmin({
@@ -33,7 +33,7 @@ function html(done) {
 
 function scss(done) {
   gulp
-    .src("src/styles/main.scss")
+    .src("src/**/*.scss")
     .pipe(isDev ? sourcemaps.init() : noop())
     .pipe(
       sass({ outputStyle: isDev ? "expanded" : "compressed" }).on(
