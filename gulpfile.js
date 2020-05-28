@@ -145,10 +145,10 @@ async function deploy(done) {
       files.forEach(async file => {
         await fs.unlink(path.join(dist, file));
       });
+
+      done && done();
     }
   );
-
-  done && done();
 }
 
 exports.html = html;
