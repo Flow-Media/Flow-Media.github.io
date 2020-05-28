@@ -12,9 +12,20 @@ const port = PORT ? +PORT : 5300;
 const isDev = NODE_ENV === "development";
 const livereload = true;
 
+const distDir = "dist";
+const htmlSrc = "src/**/*.html";
+const scssSrc = "src/**/*.scss";
+const imageSrc = [
+  "src/**/*.jpg",
+  "src/**/*.jpeg",
+  "src/**/*.png",
+  "src/**/*.gif",
+  "src/**/*.svg"
+];
+
 function html(done) {
   gulp
-    .src("src/**/*.html")
+    .src(htmlSrc)
     .pipe(
       !isDev
         ? htmlmin({
@@ -25,7 +36,7 @@ function html(done) {
           })
         : noop()
     )
-    .pipe(gulp.dest("dist"))
+    .pipe(gulp.dest(distDir))
     .pipe(livereload ? connect.reload() : noop());
 
   done && done();
@@ -33,7 +44,7 @@ function html(done) {
 
 function scss(done) {
   gulp
-    .src("src/**/*.scss")
+    .src(scssSrc)
     .pipe(isDev ? sourcemaps.init() : noop())
     .pipe(
       sass({ outputStyle: isDev ? "expanded" : "compressed" }).on(
@@ -43,7 +54,7 @@ function scss(done) {
     )
     .pipe(autoprefixer({ cascade: false, grid: "autoplace" }))
     .pipe(isDev ? sourcemaps.write(".") : noop())
-    .pipe(gulp.dest("dist"))
+    .pipe(gulp.dest(distDir))
     .pipe(livereload ? connect.reload() : noop());
 
   done && done();
@@ -51,13 +62,7 @@ function scss(done) {
 
 function image(done) {
   gulp
-    .src([
-      "src/**/*.jpg",
-      "src/**/*.jpeg",
-      "src/**/*.png",
-      "src/**/*.gif",
-      "src/**/*.svg"
-    ])
+    .src(imageSrc)
     .pipe(
       imagemin([
         imagemin.gifsicle({ interlaced: true }),
@@ -68,12 +73,14 @@ function image(done) {
         })
       ])
     )
-    .pipe(gulp.dest("dist"));
+    .pipe(gulp.dest(distDir));
+
+  done && done();
 }
 
 function serve(done) {
   connect.server({
-    root: "dist/",
+    root: `${distDir}/`,
     livereload,
     port
   });
@@ -82,18 +89,9 @@ function serve(done) {
 }
 
 function watch(done) {
-  gulp.watch("src/**/*.html", html);
-  gulp.watch("src/**/*.scss", scss);
-  gulp.watch(
-    [
-      "src/**/*.jpg",
-      "src/**/*.jpeg",
-      "src/**/*.png",
-      "src/**/*.gif",
-      "src/**/*.svg"
-    ],
-    image
-  );
+  gulp.watch(htmlSrc, html);
+  gulp.watch(scssSrc, scss);
+  gulp.watch(imageSrc, image);
 
   done && done();
 }
