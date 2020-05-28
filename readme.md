@@ -43,10 +43,10 @@ yarn dev # (or npm run dev)
 yarn fmt # (or npm run fmt)
 ```
 
-#### Push to GitHub Pages
+#### Deploy to GitHub Pages
 
 ```bash
-yarn push # (or npm run push)
+yarn deploy # (or npm run deploy)
 ```
 
 #### Delete dist directory
