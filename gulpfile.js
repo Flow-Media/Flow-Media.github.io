@@ -121,6 +121,7 @@ exports.html = html;
 exports.scss = scss;
 exports.js = js;
 exports.image = image;
+exports.serve = serve;
 exports.watch = watch;
 exports.build = build;
 exports.dev = dev;
