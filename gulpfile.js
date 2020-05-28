@@ -107,6 +107,7 @@ function serve(done) {
 function watch(done) {
   gulp.watch(htmlSrc, html);
   gulp.watch(scssSrc, scss);
+  gulp.watch(jsSrc, js);
   gulp.watch(imageSrc, image);
 
   done && done();
