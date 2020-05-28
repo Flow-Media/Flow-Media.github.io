@@ -22,6 +22,7 @@ const distDir = "dist";
 const htmlSrc = "src/**/*.html";
 const scssSrc = "src/**/*.scss";
 const jsSrc = "src/**/*.js";
+const extraDir = "extra";
 const imageSrc = [
   "src/**/*.jpg",
   "src/**/*.jpeg",
@@ -122,13 +123,19 @@ const build = gulp.series(html, scss, js, image);
 const dev = gulp.series(build, serve, watch);
 
 async function deploy(done) {
-  const src = path.join(__dirname, "extra");
+  const extra = path.join(__dirname, extraDir);
   const dist = path.join(__dirname, distDir);
 
-  const files = await fs.readdir(src);
+  const extraFiles = await fs.readdir(extra);
+  const otherFiles = ["readme.md"];
 
-  files.forEach(async file => {
-    await fs.copyFile(path.join(src, file), path.join(dist, file));
+  const srcFiles = [...extraFiles, ...otherFiles].map(f =>
+    extraFiles.includes(f) ? path.join(extra, f) : path.join(__dirname, f)
+  );
+  const distFiles = [...extraFiles, ...otherFiles].map(f => path.join(dist, f));
+
+  srcFiles.forEach(async f => {
+    await fs.copyFile(f, distFiles[srcFiles.indexOf(f)]);
   });
 
   ghPages.publish(
@@ -142,8 +149,8 @@ async function deploy(done) {
         throw err;
       }
 
-      files.forEach(async file => {
-        await fs.unlink(path.join(dist, file));
+      distFiles.forEach(async f => {
+        await fs.unlink(f);
       });
 
       done && done();
