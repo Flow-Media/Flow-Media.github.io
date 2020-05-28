@@ -2,6 +2,8 @@ const gulp = require("gulp");
 const htmlmin = require("gulp-htmlmin");
 const sass = require("gulp-sass");
 const autoprefixer = require("gulp-autoprefixer");
+const terser = require("gulp-terser");
+const babel = require("gulp-babel");
 const sourcemaps = require("gulp-sourcemaps");
 const connect = require("gulp-connect");
 const imagemin = require("gulp-imagemin");
@@ -15,6 +17,7 @@ const livereload = true;
 const distDir = "dist";
 const htmlSrc = "src/**/*.html";
 const scssSrc = "src/**/*.scss";
+const jsSrc = "src/**/*.js";
 const imageSrc = [
   "src/**/*.jpg",
   "src/**/*.jpeg",
@@ -60,6 +63,19 @@ function scss(done) {
   done && done();
 }
 
+function js(done) {
+  gulp
+    .src(jsSrc)
+    .pipe(isDev ? sourcemaps.init() : noop())
+    .pipe(babel({ presets: ["@babel/env"] }))
+    .pipe(terser({ output: { quote_style: 0 } }))
+    .pipe(isDev ? sourcemaps.write(".") : noop())
+    .pipe(gulp.dest(distDir))
+    .pipe(livereload ? connect.reload() : noop());
+
+  done && done();
+}
+
 function image(done) {
   gulp
     .src(imageSrc)
@@ -96,12 +112,13 @@ function watch(done) {
   done && done();
 }
 
-const build = gulp.series(html, scss, image);
+const build = gulp.series(html, scss, js, image);
 
 const dev = gulp.series(build, serve, watch);
 
 exports.html = html;
 exports.scss = scss;
+exports.js = js;
 exports.image = image;
 exports.watch = watch;
 exports.build = build;
