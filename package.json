@@ -14,7 +14,8 @@
     "watch": "gulp watch",
     "dev": "gulp dev",
     "fmt": "prettier src/**/*",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "push": "gh-pages -d dist"
   },
   "devDependencies": {
     "gh-pages": "^2.2.0",
