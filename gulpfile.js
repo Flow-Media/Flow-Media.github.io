@@ -9,6 +9,8 @@ const connect = require("gulp-connect");
 const imagemin = require("gulp-imagemin");
 const noop = require("gulp-noop");
 const ghPages = require("gh-pages");
+const path = require("path");
+const { promises: fs } = require("fs");
 
 const { PORT, NODE_ENV } = process.env;
 
@@ -28,7 +30,7 @@ const imageSrc = [
   "src/**/*.svg"
 ];
 
-function html(done) {
+function html() {
   gulp
     .src(htmlSrc)
     .pipe(
@@ -43,11 +45,9 @@ function html(done) {
     )
     .pipe(gulp.dest(distDir))
     .pipe(livereload ? connect.reload() : noop());
-
-  done && done();
 }
 
-function scss(done) {
+function scss() {
   gulp
     .src(scssSrc)
     .pipe(isDev ? sourcemaps.init() : noop())
@@ -61,11 +61,9 @@ function scss(done) {
     .pipe(isDev ? sourcemaps.write(".") : noop())
     .pipe(gulp.dest(distDir))
     .pipe(livereload ? connect.reload() : noop());
-
-  done && done();
 }
 
-function js(done) {
+function js() {
   gulp
     .src(jsSrc)
     .pipe(isDev ? sourcemaps.init() : noop())
@@ -74,11 +72,9 @@ function js(done) {
     .pipe(isDev ? sourcemaps.write(".") : noop())
     .pipe(gulp.dest(distDir))
     .pipe(livereload ? connect.reload() : noop());
-
-  done && done();
 }
 
-function image(done) {
+function image() {
   gulp
     .src(imageSrc)
     .pipe(
@@ -92,34 +88,37 @@ function image(done) {
       ])
     )
     .pipe(gulp.dest(distDir));
-
-  done && done();
 }
 
-function serve(done) {
+function serve() {
   connect.server({
     root: `${distDir}/`,
     livereload,
     port
   });
-
-  done && done();
 }
 
-function watch(done) {
+function watch() {
   gulp.watch(htmlSrc, html);
   gulp.watch(scssSrc, scss);
   gulp.watch(jsSrc, js);
   gulp.watch(imageSrc, image);
-
-  done && done();
 }
 
 const build = gulp.series(html, scss, js, image);
 
 const dev = gulp.series(build, serve, watch);
 
-function deploy(done) {
+async function deploy() {
+  const src = path.join(__dirname, "extra");
+  const dist = path.join(__dirname, distDir);
+
+  const files = await fs.readdir(src);
+
+  files.forEach(async file => {
+    await fs.copyFile(path.join(src, file), path.join(dist, file));
+  });
+
   ghPages.publish(
     "dist",
     {
@@ -129,10 +128,12 @@ function deploy(done) {
       if (err) {
         console.error(err);
       }
+
+      files.forEach(async file => {
+        await fs.unlink(path.join(dist, file));
+      });
     }
   );
-
-  done && done();
 }
 
 exports.html = html;
