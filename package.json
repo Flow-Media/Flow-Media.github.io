@@ -10,12 +10,14 @@
   "author": "Flow Team (https://github.com/Flow-Media)",
   "license": "MIT",
   "scripts": {
-    "build": "gulp build",
+    "start": "gulp serve",
+    "serve": "gulp serve",
     "watch": "gulp watch",
+    "build": "gulp build",
     "dev": "gulp dev",
     "fmt": "prettier src/**/*",
-    "clean": "rimraf dist",
-    "push": "gh-pages -d dist"
+    "push": "gh-pages -d dist",
+    "clean": "rimraf dist"
   },
   "devDependencies": {
     "@babel/core": "^7.10.1",
