@@ -120,9 +120,17 @@ const build = gulp.series(html, scss, js, image);
 const dev = gulp.series(build, serve, watch);
 
 function deploy(done) {
-  ghPages.publish("dist", {
-    branch: "master"
-  });
+  ghPages.publish(
+    "dist",
+    {
+      branch: "master"
+    },
+    err => {
+      if (err) {
+        console.error(err);
+      }
+    }
+  );
 
   done && done();
 }
