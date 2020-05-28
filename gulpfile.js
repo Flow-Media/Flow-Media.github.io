@@ -139,6 +139,7 @@ async function deploy(done) {
     err => {
       if (err) {
         console.error(err);
+        throw err;
       }
 
       files.forEach(async file => {
