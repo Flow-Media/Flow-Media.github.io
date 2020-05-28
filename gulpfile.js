@@ -30,7 +30,7 @@ const imageSrc = [
   "src/**/*.svg"
 ];
 
-function html() {
+function html(done) {
   gulp
     .src(htmlSrc)
     .pipe(
@@ -45,9 +45,11 @@ function html() {
     )
     .pipe(gulp.dest(distDir))
     .pipe(livereload ? connect.reload() : noop());
+
+  done && done();
 }
 
-function scss() {
+function scss(done) {
   gulp
     .src(scssSrc)
     .pipe(isDev ? sourcemaps.init() : noop())
@@ -61,9 +63,11 @@ function scss() {
     .pipe(isDev ? sourcemaps.write(".") : noop())
     .pipe(gulp.dest(distDir))
     .pipe(livereload ? connect.reload() : noop());
+
+  done && done();
 }
 
-function js() {
+function js(done) {
   gulp
     .src(jsSrc)
     .pipe(isDev ? sourcemaps.init() : noop())
@@ -72,9 +76,11 @@ function js() {
     .pipe(isDev ? sourcemaps.write(".") : noop())
     .pipe(gulp.dest(distDir))
     .pipe(livereload ? connect.reload() : noop());
+
+  done && done();
 }
 
-function image() {
+function image(done) {
   gulp
     .src(imageSrc)
     .pipe(
@@ -88,28 +94,34 @@ function image() {
       ])
     )
     .pipe(gulp.dest(distDir));
+
+  done && done();
 }
 
-function serve() {
+function serve(done) {
   connect.server({
     root: `${distDir}/`,
     livereload,
     port
   });
+
+  done && done();
 }
 
-function watch() {
+function watch(done) {
   gulp.watch(htmlSrc, html);
   gulp.watch(scssSrc, scss);
   gulp.watch(jsSrc, js);
   gulp.watch(imageSrc, image);
+
+  done && done();
 }
 
 const build = gulp.series(html, scss, js, image);
 
 const dev = gulp.series(build, serve, watch);
 
-async function deploy() {
+async function deploy(done) {
   const src = path.join(__dirname, "extra");
   const dist = path.join(__dirname, distDir);
 
@@ -134,6 +146,8 @@ async function deploy() {
       });
     }
   );
+
+  done && done();
 }
 
 exports.html = html;
