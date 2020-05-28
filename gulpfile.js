@@ -8,6 +8,8 @@ const sourcemaps = require("gulp-sourcemaps");
 const connect = require("gulp-connect");
 const imagemin = require("gulp-imagemin");
 const noop = require("gulp-noop");
+const ghPages = require("gh-pages");
+
 const { PORT, NODE_ENV } = process.env;
 
 const port = PORT ? +PORT : 5300;
@@ -117,6 +119,14 @@ const build = gulp.series(html, scss, js, image);
 
 const dev = gulp.series(build, serve, watch);
 
+function deploy(done) {
+  ghPages.publish("dist", {
+    branch: "master"
+  });
+
+  done && done();
+}
+
 exports.html = html;
 exports.scss = scss;
 exports.js = js;
@@ -125,4 +135,5 @@ exports.serve = serve;
 exports.watch = watch;
 exports.build = build;
 exports.dev = dev;
+exports.deploy = deploy;
 exports.default = build;
