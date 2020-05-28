@@ -4,7 +4,7 @@
 
 You can check it out [here](https://flow-media.github.io)
 
-> NOTE: The development (source) code is on the dev branch
+> NOTE: The development (source) code is in the dev branch
 
 ## Instructions
 
