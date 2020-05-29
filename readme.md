@@ -33,31 +33,31 @@ yarn install # (or npm install)
 yarn build # (or npm run build)
 ```
 
-#### Run Production
+### Run Production
 
 ```bash
 yarn start # (or npm start)
 ```
 
-#### Run Development
+### Run Development
 
 ```bash
 yarn dev # (or npm run dev)
 ```
 
-#### Format
+### Format
 
 ```bash
 yarn fmt # (or npm run fmt)
 ```
 
-#### Deploy to GitHub Pages
+### Deploy to GitHub Pages
 
 ```bash
 yarn deploy # (or npm run deploy)
 ```
 
-#### Delete dist directory
+### Delete dist directory
 
 ```bash
 yarn clean # (or npm run clean)
