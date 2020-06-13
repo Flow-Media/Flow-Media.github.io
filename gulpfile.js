@@ -1,5 +1,4 @@
 const gulp = require("gulp");
-const htmlmin = require("gulp-htmlmin");
 const sass = require("gulp-sass");
 const autoprefixer = require("gulp-autoprefixer");
 const terser = require("gulp-terser");
@@ -8,14 +7,11 @@ const sourcemaps = require("gulp-sourcemaps");
 const connect = require("gulp-connect");
 const imagemin = require("gulp-imagemin");
 const noop = require("gulp-noop");
-const path = require("path");
-const { promises: fs } = require("fs");
 
 const { PORT, NODE_ENV } = process.env;
 
 const port = PORT ? +PORT : 5300;
 const isDev = NODE_ENV === "development";
-const livereload = true;
 
 const srcDir = "src";
 const distDir = "dist";
@@ -41,9 +37,9 @@ function scss(done) {
       )
     )
     .pipe(autoprefixer({ cascade: false, grid: "autoplace" }))
-    .pipe(isDev ? sourcemaps.write(".") : noop())
+    .pipe(isDev ? sourcemaps.write(".", undefined) : noop())
     .pipe(gulp.dest(distDir))
-    .pipe(livereload ? connect.reload() : noop());
+    .pipe(isDev ? connect.reload() : noop());
 
   done && done();
 }
@@ -54,9 +50,9 @@ function js(done) {
     .pipe(isDev ? sourcemaps.init() : noop())
     .pipe(babel({ presets: ["@babel/env"] }))
     .pipe(terser({ output: { quote_style: 0 } }))
-    .pipe(isDev ? sourcemaps.write(".") : noop())
+    .pipe(isDev ? sourcemaps.write(".", undefined) : noop())
     .pipe(gulp.dest(distDir))
-    .pipe(livereload ? connect.reload() : noop());
+    .pipe(isDev ? connect.reload() : noop());
 
   done && done();
 }
@@ -82,7 +78,7 @@ function image(done) {
 function serve(done) {
   connect.server({
     root: `${distDir}/`,
-    livereload,
+    livereload: isDev,
     port
   });
 
