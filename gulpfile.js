@@ -8,7 +8,6 @@ const sourcemaps = require("gulp-sourcemaps");
 const connect = require("gulp-connect");
 const imagemin = require("gulp-imagemin");
 const noop = require("gulp-noop");
-const ghPages = require("gh-pages");
 const path = require("path");
 const { promises: fs } = require("fs");
 
@@ -18,11 +17,11 @@ const port = PORT ? +PORT : 5300;
 const isDev = NODE_ENV === "development";
 const livereload = true;
 
+const srcDir = "src";
 const distDir = "dist";
-const htmlSrc = "src/**/*.html";
-const scssSrc = "src/**/*.scss";
-const jsSrc = "src/**/*.js";
-const extraDir = "extra";
+
+const scssSrc = `${srcDir}/**/*.scss`;
+const jsSrc = `${srcDir}/**/*.js`;
 const imageSrc = [
   "src/**/*.jpg",
   "src/**/*.jpeg",
@@ -30,25 +29,6 @@ const imageSrc = [
   "src/**/*.gif",
   "src/**/*.svg"
 ];
-
-function html(done) {
-  gulp
-    .src(htmlSrc)
-    .pipe(
-      !isDev
-        ? htmlmin({
-            caseSensitive: true,
-            collapseWhitespace: true,
-            removeComments: true,
-            decodeEntities: true
-          })
-        : noop()
-    )
-    .pipe(gulp.dest(distDir))
-    .pipe(livereload ? connect.reload() : noop());
-
-  done && done();
-}
 
 function scss(done) {
   gulp
@@ -110,7 +90,6 @@ function serve(done) {
 }
 
 function watch(done) {
-  gulp.watch(htmlSrc, html);
   gulp.watch(scssSrc, scss);
   gulp.watch(jsSrc, js);
   gulp.watch(imageSrc, image);
@@ -118,47 +97,10 @@ function watch(done) {
   done && done();
 }
 
-const build = gulp.series(html, scss, js, image);
+const build = gulp.series(scss, js, image);
 
 const dev = gulp.series(build, serve, watch);
 
-async function deploy(done) {
-  const extra = path.join(__dirname, extraDir);
-  const dist = path.join(__dirname, distDir);
-
-  const extraFiles = await fs.readdir(extra);
-  const otherFiles = ["readme.md"];
-
-  const srcFiles = [...extraFiles, ...otherFiles].map(f =>
-    extraFiles.includes(f) ? path.join(extra, f) : path.join(__dirname, f)
-  );
-  const distFiles = [...extraFiles, ...otherFiles].map(f => path.join(dist, f));
-
-  srcFiles.forEach(async f => {
-    await fs.copyFile(f, distFiles[srcFiles.indexOf(f)]);
-  });
-
-  ghPages.publish(
-    "dist",
-    {
-      branch: "master"
-    },
-    err => {
-      if (err) {
-        console.error(err);
-        throw err;
-      }
-
-      distFiles.forEach(async f => {
-        await fs.unlink(f);
-      });
-
-      done && done();
-    }
-  );
-}
-
-exports.html = html;
 exports.scss = scss;
 exports.js = js;
 exports.image = image;
@@ -166,5 +108,4 @@ exports.serve = serve;
 exports.watch = watch;
 exports.build = build;
 exports.dev = dev;
-exports.deploy = deploy;
 exports.default = build;
