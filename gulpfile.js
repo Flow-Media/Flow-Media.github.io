@@ -16,6 +16,7 @@ const isDev = NODE_ENV === "development";
 const srcDir = "src";
 const distDir = "dist";
 
+const htmlSrc = "**/*.html";
 const scssSrc = `${srcDir}/**/*.scss`;
 const jsSrc = `${srcDir}/**/*.js`;
 const imageSrc = [
@@ -25,6 +26,12 @@ const imageSrc = [
   "src/**/*.gif",
   "src/**/*.svg"
 ];
+
+function html(done) {
+  gulp.src(htmlSrc).pipe(isDev ? connect.reload() : noop());
+
+  done && done();
+}
 
 function scss(done) {
   gulp
@@ -86,6 +93,7 @@ function serve(done) {
 }
 
 function watch(done) {
+  gulp.watch(htmlSrc, html);
   gulp.watch(scssSrc, scss);
   gulp.watch(jsSrc, js);
   gulp.watch(imageSrc, image);
