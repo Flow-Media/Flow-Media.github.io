@@ -34,7 +34,8 @@
     "husky": "^4.2.5",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
-    "sass": "^1.26.5"
+    "sass": "^1.26.5",
+    "simple-git": "^2.6.0"
   },
   "husky": {
     "hooks": {
