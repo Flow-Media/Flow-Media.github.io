@@ -4,11 +4,6 @@
 
 You can check it out [here](https://flow-media.github.io)
 
-<<<<<<< HEAD
-> NOTE: The development (source) code is in the dev branch
-
-=======
->>>>>>> 5ed4292c511533a120d6e585ebc4698861746b4b
 ## Instructions
 
 ### Clone
@@ -18,15 +13,6 @@ git clone git@github.com:Flow-Media/Flow-Media.github.io.git flow-landing-page
 cd flow-landing-page
 ```
 
-<<<<<<< HEAD
-### Check out to dev branch
-
-```bash
-git checkout dev
-```
-
-=======
->>>>>>> 5ed4292c511533a120d6e585ebc4698861746b4b
 ### Install Dependencies
 
 ```bash
