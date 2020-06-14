@@ -7,7 +7,9 @@ const sourcemaps = require("gulp-sourcemaps");
 const connect = require("gulp-connect");
 const imagemin = require("gulp-imagemin");
 const noop = require("gulp-noop");
-const rimraf = require("rimraf");
+const simpleGit = require("simple-git");
+
+const git = simpleGit(".");
 
 const { PORT, NODE_ENV } = process.env;
 
@@ -77,6 +79,8 @@ function image(done) {
   done && done();
 }
 
+const build = gulp.series(scss, js, image);
+
 function serve(done) {
   connect.server({
     root: `${distDir}/`,
@@ -96,22 +100,41 @@ function watch(done) {
   done && done();
 }
 
-function clean(done) {
-  rimraf(distDir, err => {
-    throw err;
-  });
-}
-
-const build = gulp.series(scss, js, image);
-
 const dev = gulp.series(build, serve, watch);
+
+async function handleDistGitChanges(done) {
+  try {
+    await git.init();
+
+    const { not_added, created, modified, renamed } = await git.status();
+
+    const distChanged = [
+      ...not_added,
+      ...created,
+      ...modified,
+      ...renamed
+    ].filter(n => n.startsWith(distDir));
+
+    if (distChanged.length > 0) {
+      await git.commit("update dist directory", [distChanged]);
+    }
+
+    done && done();
+  } catch (err) {
+    console.error("failed to init or commit with git");
+
+    throw err;
+  }
+}
 
 exports.scss = scss;
 exports.js = js;
 exports.image = image;
+exports.build = build;
 exports.serve = serve;
 exports.watch = watch;
-exports.clean = clean;
-exports.build = build;
 exports.dev = dev;
+exports.clean = clean;
+exports.handleDistGitChanges = handleDistGitChanges;
+
 exports.default = build;
