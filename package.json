@@ -15,7 +15,7 @@
     "watch": "gulp watch",
     "build": "gulp build",
     "dev": "gulp dev",
-    "fmt": "prettier src/**/*",
+    "fmt": "prettier --write src/**/*.{html,css,scss,js,ts}",
     "clean": "rimraf dist"
   },
   "devDependencies": {
