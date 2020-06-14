@@ -1,0 +1,44 @@
+{
+  "name": "flow-media.github.io",
+  "version": "1.0.0",
+  "description": "Flow's landing page",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Flow-Media/flow-media.github.io.git"
+  },
+  "author": "Flow Team (https://github.com/Flow-Media)",
+  "license": "MIT",
+  "scripts": {
+    "start": "gulp serve",
+    "serve": "gulp serve",
+    "watch": "gulp watch",
+    "build": "gulp build",
+    "dev": "gulp dev",
+    "fmt": "prettier --write src/**/*.{html,css,scss,js,ts}",
+    "clean": "rimraf dist"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.1",
+    "@babel/preset-env": "^7.10.1",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-connect": "^5.7.0",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-noop": "^1.0.0",
+    "gulp-purgecss": "^2.2.0",
+    "gulp-sass": "^4.1.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-terser": "^1.2.0",
+    "husky": "^4.2.5",
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
+    "sass": "^1.26.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn fmt && yarn clean && yarn build"
+    }
+  }
+}
