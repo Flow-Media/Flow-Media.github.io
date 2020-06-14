@@ -134,7 +134,6 @@ exports.build = build;
 exports.serve = serve;
 exports.watch = watch;
 exports.dev = dev;
-exports.clean = clean;
 exports.handleDistGitChanges = handleDistGitChanges;
 
 exports.default = build;
