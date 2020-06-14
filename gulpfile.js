@@ -116,7 +116,7 @@ async function handleDistGitChanges(done) {
     ].filter(n => n.startsWith(distDir));
 
     if (distChanged.length > 0) {
-      await git.commit("update dist directory", [distChanged]);
+      await git.commit("update dist directory", [...distChanged]);
     }
 
     done && done();
