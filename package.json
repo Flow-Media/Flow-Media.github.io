@@ -15,7 +15,6 @@
     "watch": "gulp watch",
     "build": "gulp build",
     "dev": "gulp dev",
-    "deploy": "gulp deploy",
     "fmt": "prettier src/**/*",
     "clean": "rimraf dist"
   },
