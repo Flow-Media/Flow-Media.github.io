@@ -7,6 +7,7 @@ const sourcemaps = require("gulp-sourcemaps");
 const connect = require("gulp-connect");
 const imagemin = require("gulp-imagemin");
 const noop = require("gulp-noop");
+const rimraf = require("rimraf");
 
 const { PORT, NODE_ENV } = process.env;
 
@@ -19,13 +20,7 @@ const distDir = "dist";
 const htmlSrc = "**/*.html";
 const scssSrc = `${srcDir}/**/*.scss`;
 const jsSrc = `${srcDir}/**/*.js`;
-const imageSrc = [
-  "src/**/*.jpg",
-  "src/**/*.jpeg",
-  "src/**/*.png",
-  "src/**/*.gif",
-  "src/**/*.svg"
-];
+const imageSrc = "src/**/*.{jpg,jpeg,png,gif,svg}";
 
 function html(done) {
   gulp.src(htmlSrc).pipe(isDev ? connect.reload() : noop());
@@ -101,6 +96,12 @@ function watch(done) {
   done && done();
 }
 
+function clean(done) {
+  rimraf(distDir, err => {
+    throw err;
+  });
+}
+
 const build = gulp.series(scss, js, image);
 
 const dev = gulp.series(build, serve, watch);
@@ -110,6 +111,7 @@ exports.js = js;
 exports.image = image;
 exports.serve = serve;
 exports.watch = watch;
+exports.clean = clean;
 exports.build = build;
 exports.dev = dev;
 exports.default = build;
