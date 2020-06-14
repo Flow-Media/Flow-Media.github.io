@@ -39,7 +39,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "yarn fmt && yarn clean && yarn build && git add dist && git commit -m 'update dist directory'"
+      "pre-push": "yarn fmt && yarn clean && yarn build && gulp handleDistGitChanges"
     }
   }
 }
